@@ -1,3 +1,7 @@
+# license-updater
+
+The script was created using [cursor](https://cursor.com/)
+
 ## A sample run
 ```
 $ python license_updater.py sample.csv 
