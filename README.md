@@ -1,6 +1,6 @@
 # license-updater
 
-A Python script to update license information in CSV files by querying DNF repositories using the DNF Python API.
+A Python script to update license information in CSV files by querying DNF repositories using `dnf repoquery` command.
 
 The script was created using [cursor](https://cursor.com/)
 
@@ -12,15 +12,16 @@ Before running the script, install the required dependencies:
 pip install -r requirements.txt
 ```
 
-**Note**: The `dnf` Python library requires DNF to be installed on your system. This script is designed to work on Fedora, RHEL, CentOS, and other RPM-based distributions.
+**Note**: This script requires the `dnf` command-line tool to be installed on your system. It's designed to work on Fedora, RHEL, CentOS, and other RPM-based distributions.
 
 ## Features
 
-- Uses the DNF Python API instead of subprocess calls for better performance and reliability
+- Uses `dnf repoquery` subprocess calls to retrieve package license information
 - Processes CSV files with package information
 - Automatically finds the latest version of packages when multiple versions are available
 - Skips packages marked with `UBI? = yes`
 - Supports both console output and CSV file output
+- Comprehensive error handling for various edge cases
 
 ## Usage
 
@@ -38,6 +39,35 @@ The input CSV should have at least these columns:
 - `UBI?`: Indicates whether to skip the package (script processes packages with "no")
 - `package`: The name of the package to query
 - `License`: Will be updated with the license information from DNF
+
+## Testing
+
+The project includes comprehensive unit tests that cover all major functions and edge cases. The tests use mocking to avoid actual `dnf` command calls during testing.
+
+### Running Tests
+
+You can run the tests using either pytest (recommended) or the standard unittest module:
+
+```bash
+# Using pytest (recommended for better output)
+python -m pytest test_license_updater.py -v
+
+# Using standard unittest module
+python test_license_updater.py
+
+# Run tests with coverage (if you have pytest-cov installed)
+python -m pytest test_license_updater.py --cov=license_updater --cov-report=html
+```
+
+### Test Coverage
+
+The test suite covers:
+- **`get_package_license()`**: Success cases, error handling, multiple package versions
+- **`is_newer_source()`**: Version comparison logic, edge cases with malformed names
+- **`update_licenses_from_dnf()`**: CSV processing, file I/O, error handling
+- **Integration tests**: End-to-end processing with mocked dependencies
+
+All tests use proper mocking to ensure they don't require actual `dnf` installation or network access during testing.
 
 ## A sample run
 ```
