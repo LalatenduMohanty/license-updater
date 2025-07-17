@@ -1,10 +1,6 @@
 pandas
 tabulate
-
-# Note: dnf and packaging are only needed for the DNF API version
-# For the current subprocess version, these are not required:
-# dnf
-# packaging
+dnf
 
 # Testing dependencies
 pytest>=7.0.0

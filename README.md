@@ -1,6 +1,6 @@
 # license-updater
 
-A Python script to update license information in CSV files by querying DNF repositories using `dnf repoquery` command.
+A Python script to update license information in CSV files by querying DNF repositories using the [DNF Python API](https://dnf.readthedocs.io/en/latest/api_queries.html).
 
 The script was created using [cursor](https://cursor.com/)
 
@@ -12,16 +12,18 @@ Before running the script, install the required dependencies:
 pip install -r requirements.txt
 ```
 
-**Note**: This script requires the `dnf` command-line tool to be installed on your system. It's designed to work on Fedora, RHEL, CentOS, and other RPM-based distributions.
+**Note**: This script requires the DNF Python library and DNF to be installed on your system. It's designed to work on Fedora, RHEL, CentOS, and other RPM-based distributions.
 
 ## Features
 
-- Uses `dnf repoquery` subprocess calls to retrieve package license information
+- Uses the DNF Python API for direct access to package repository information
 - Processes CSV files with package information
-- Automatically finds the latest version of packages when multiple versions are available
+- Automatically finds the latest version using DNF's built-in `latest()` method
+- Proper EVR (Epoch, Version, Release) comparison for accurate version sorting
 - Skips packages marked with `UBI? = yes`
 - Supports both console output and CSV file output
 - Comprehensive error handling for various edge cases
+- Efficient single DNF base initialization for processing multiple packages
 
 ## Usage
 
@@ -42,7 +44,7 @@ The input CSV should have at least these columns:
 
 ## Testing
 
-The project includes comprehensive unit tests that cover all major functions and edge cases. The tests use mocking to avoid actual `dnf` command calls during testing.
+The project includes comprehensive unit tests that cover all major functions and edge cases. The tests use mocking to simulate the DNF API without requiring actual DNF installation or network access.
 
 ### Running Tests
 
@@ -62,12 +64,12 @@ python -m pytest test_license_updater.py --cov=license_updater --cov-report=html
 ### Test Coverage
 
 The test suite covers:
-- **`get_package_license()`**: Success cases, error handling, multiple package versions
-- **`is_newer_source()`**: Version comparison logic, edge cases with malformed names
-- **`update_licenses_from_dnf()`**: CSV processing, file I/O, error handling
-- **Integration tests**: End-to-end processing with mocked dependencies
+- **`get_package_license()`**: Success cases, DNF API error handling, multiple package versions
+- **`is_newer_package()`**: EVR comparison logic, epoch/version/release comparison 
+- **`update_licenses_from_dnf()`**: CSV processing, DNF initialization, file I/O error handling
+- **Integration tests**: End-to-end processing with mocked DNF API components
 
-All tests use proper mocking to ensure they don't require actual `dnf` installation or network access during testing.
+All tests use proper mocking of DNF Base objects, Query objects, and Package objects to ensure they don't require actual DNF installation or network access during testing.
 
 ## A sample run
 ```
