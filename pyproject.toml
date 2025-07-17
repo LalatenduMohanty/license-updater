@@ -1,6 +1,6 @@
 [build-system]
-requires = ["setuptools>=61.0", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [project]
 name = "license-updater"
@@ -50,10 +50,6 @@ Homepage = "https://github.com/yourusername/license-updater"
 
 [project.scripts]
 license-updater = "license_updater.cli:main"
-
-[tool.setuptools.packages.find]
-where = ["."]
-include = ["license_updater*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
