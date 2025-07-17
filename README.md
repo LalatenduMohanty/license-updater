@@ -1,6 +1,43 @@
 # license-updater
 
+A Python script to update license information in CSV files by querying DNF repositories using the DNF Python API.
+
 The script was created using [cursor](https://cursor.com/)
+
+## Requirements
+
+Before running the script, install the required dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+**Note**: The `dnf` Python library requires DNF to be installed on your system. This script is designed to work on Fedora, RHEL, CentOS, and other RPM-based distributions.
+
+## Features
+
+- Uses the DNF Python API instead of subprocess calls for better performance and reliability
+- Processes CSV files with package information
+- Automatically finds the latest version of packages when multiple versions are available
+- Skips packages marked with `UBI? = yes`
+- Supports both console output and CSV file output
+
+## Usage
+
+```bash
+# Display results in console
+python license_updater.py input.csv
+
+# Save results to a new CSV file
+python license_updater.py input.csv -o output.csv
+```
+
+## CSV Format
+
+The input CSV should have at least these columns:
+- `UBI?`: Indicates whether to skip the package (script processes packages with "no")
+- `package`: The name of the package to query
+- `License`: Will be updated with the license information from DNF
 
 ## A sample run
 ```

@@ -1,0 +1,4 @@
+pandas
+dnf
+packaging
+tabulate 
