@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 import pandas as pd
 import sys
 import io
-from license_updater import (
+from license_updater.core import (
     get_package_license,
     is_newer_package,
     update_licenses_from_dnf
@@ -29,7 +29,7 @@ class MockPackage:
 class TestGetPackageLicense(unittest.TestCase):
     """Test cases for get_package_license function"""
 
-    @patch('license_updater.dnf.Base')
+    @patch('license_updater.core.dnf.Base')
     def test_successful_single_package(self, mock_dnf_base):
         """Test successful retrieval of license for a single package"""
         # Setup mock DNF base and query
@@ -59,7 +59,7 @@ class TestGetPackageLicense(unittest.TestCase):
         mock_base.fill_sack.assert_called_once()
         mock_available_query.filter.assert_called_once_with(name="test-package")
 
-    @patch('license_updater.dnf.Base')
+    @patch('license_updater.core.dnf.Base')
     def test_package_with_architecture_suffix(self, mock_dnf_base):
         """Test that architecture suffixes are stripped correctly"""
         mock_base = MagicMock()
@@ -88,7 +88,7 @@ class TestGetPackageLicense(unittest.TestCase):
         # Should query for "boost-atomic" without the architecture suffix
         mock_available_query.filter.assert_called_with(name="boost-atomic")
 
-    @patch('license_updater.dnf.Base')
+    @patch('license_updater.core.dnf.Base')
     def test_multiple_packages_latest_version(self, mock_dnf_base):
         """Test retrieval when multiple versions exist"""
         mock_base = MagicMock()
@@ -121,7 +121,7 @@ class TestGetPackageLicense(unittest.TestCase):
         
         self.assertEqual(result, "MIT AND Apache-2.0")
 
-    @patch('license_updater.dnf.Base')
+    @patch('license_updater.core.dnf.Base')
     def test_no_packages_found(self, mock_dnf_base):
         """Test when no packages are found"""
         mock_base = MagicMock()
@@ -146,7 +146,7 @@ class TestGetPackageLicense(unittest.TestCase):
         
         self.assertEqual(result, "N/A")
 
-    @patch('license_updater.dnf.Base')
+    @patch('license_updater.core.dnf.Base')
     def test_package_without_license(self, mock_dnf_base):
         """Test when package exists but has no license"""
         mock_base = MagicMock()
@@ -172,7 +172,7 @@ class TestGetPackageLicense(unittest.TestCase):
         
         self.assertEqual(result, "N/A")
 
-    @patch('license_updater.dnf.Base')
+    @patch('license_updater.core.dnf.Base')
     def test_dnf_initialization_error(self, mock_dnf_base):
         """Test when DNF initialization fails"""
         mock_base = MagicMock()
@@ -293,8 +293,8 @@ class TestUpdateLicensesFromDnf(unittest.TestCase):
             'License': ['', '', 'Old License']
         })
 
-    @patch('license_updater.get_package_license')
-    @patch('license_updater.dnf.Base')
+    @patch('license_updater.core.get_package_license')
+    @patch('license_updater.core.dnf.Base')
     @patch('pandas.read_csv')
     def test_successful_processing(self, mock_read_csv, mock_dnf_base, mock_get_license):
         """Test successful CSV processing"""
@@ -341,8 +341,8 @@ class TestUpdateLicensesFromDnf(unittest.TestCase):
             
         self.assertIn("Error reading CSV file", fake_stderr.getvalue())
 
-    @patch('license_updater.get_package_license')
-    @patch('license_updater.dnf.Base')
+    @patch('license_updater.core.get_package_license')
+    @patch('license_updater.core.dnf.Base')
     @patch('pandas.read_csv')
     def test_dnf_initialization_error(self, mock_read_csv, mock_dnf_base, mock_get_license):
         """Test handling of DNF initialization errors"""
@@ -358,8 +358,8 @@ class TestUpdateLicensesFromDnf(unittest.TestCase):
                 
         self.assertIn("Error initializing DNF", fake_stderr.getvalue())
 
-    @patch('license_updater.get_package_license')
-    @patch('license_updater.dnf.Base')
+    @patch('license_updater.core.get_package_license')
+    @patch('license_updater.core.dnf.Base')
     @patch('pandas.read_csv')
     def test_output_to_file(self, mock_read_csv, mock_dnf_base, mock_get_license):
         """Test saving output to file"""
@@ -380,7 +380,7 @@ class TestUpdateLicensesFromDnf(unittest.TestCase):
 class TestIntegration(unittest.TestCase):
     """Integration tests"""
 
-    @patch('license_updater.dnf.Base')
+    @patch('license_updater.core.dnf.Base')
     @patch('pandas.read_csv')
     def test_end_to_end_processing(self, mock_read_csv, mock_dnf_base):
         """Test end-to-end processing with mocked DNF API"""
