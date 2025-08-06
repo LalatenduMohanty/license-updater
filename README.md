@@ -11,29 +11,40 @@ A Python package for updating license information in CSV files by querying DNF r
 ### Option 1: Development Installation (Recommended)
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/license-updater.git
+git clone https://github.com/LalatenduMohanty/license-updater.git
 cd license-updater
 
-# Install in development mode with all dependencies
-pip install -e ".[dev]"
+# Install development dependencies using make
+make install-dev
+
+# OR install manually
+pip install -r requirements.txt
+pip install pytest pytest-mock pytest-cov black flake8 mypy
 ```
 
 ### Option 2: Production Installation
 ```bash
 # Install production dependencies only
-pip install -e .
+pip install -r requirements.txt
 ```
 
-### Option 3: Manual Installation
+### Option 3: Build and Install Package
 ```bash
-# Install required dependencies
-pip install -r requirements.txt
+# Build the package using hatch
+hatch build
+
+# Install the built wheel (replace with actual filename)
+pip install dist/license_updater-1.0.0-py3-none-any.whl
 ```
 
 **System Requirements**: 
 - Python 3.8+
-- DNF package manager installed on your system
+- DNF package manager installed on your system (`dnf install python3-dnf`)
 - Works on Fedora, RHEL, CentOS, and other RPM-based distributions
+
+**Important Notes**:
+- The `dnf` Python module cannot be installed via pip and must be installed through your system package manager. This is why development with isolated virtual environments (like `hatch run`) may not work - use `make` commands instead which use system Python.
+- Editable installs (`pip install -e .`) may not work with hatchling backend. Use `make install-dev` or manual installation instead.
 
 ## Usage
 
@@ -66,7 +77,7 @@ print(f"License: {license_info}")
 ### 3. Development Automation
 
 ```bash
-# Run all tests
+# Run all tests (uses system Python with DNF available)
 make test
 
 # Run tests with coverage
@@ -84,9 +95,11 @@ make dev
 # Clean build artifacts
 make clean
 
-# Build distribution packages
-make build
+# Build distribution packages (works with hatch)
+hatch build
 ```
+
+**Note**: Use `make` commands for development since they use system Python where DNF is available. `hatch run` commands may fail due to DNF dependency constraints.
 
 ## Project Structure
 
@@ -154,7 +167,7 @@ python -m pytest tests/test_license_updater.py::TestGetPackageLicense -v
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/yourusername/license-updater.git
+git clone https://github.com/LalatenduMohanty/license-updater.git
 cd license-updater
 make install-dev
 

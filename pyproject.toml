@@ -44,9 +44,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/license-updater"
-"Bug Reports" = "https://github.com/yourusername/license-updater/issues"
-"Source" = "https://github.com/yourusername/license-updater"
+Homepage = "https://github.com/LalatenduMohanty/license-updater"
+"Bug Reports" = "https://github.com/LalatenduMohanty/license-updater/issues"
+"Source" = "https://github.com/LalatenduMohanty/license-updater"
 
 [project.scripts]
 license-updater = "license_updater.cli:main"
